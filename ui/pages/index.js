@@ -13,6 +13,7 @@ import {
   LegacyMetaMetricsProvider as NewLegacyMetaMetricsProvider,
 } from '../contexts/metametrics.new';
 import ErrorPage from './error';
+
 import Routes from './routes';
 
 class Index extends PureComponent {

@@ -95,6 +95,44 @@ const AssetListItem = ({
     dispatch,
   ]);
 
+  const showTokenNFTList = useMemo(() => {
+    if (tokenAddress === null || tokenAddress === undefined) {
+      return null;
+    }
+    return (
+      <Button
+        type="link"
+        className="asset-list-item__send-token-button"
+        onClick={(e) => {
+          e.stopPropagation();
+          sendTokenEvent();
+          dispatch(
+            updateSendAsset({
+              type: ASSET_TYPES.TOKEN,
+              details: {
+                address: tokenAddress,
+                decimals: tokenDecimals,
+                symbol: tokenSymbol,
+              },
+            }),
+          ).then(() => {
+            history.push(SEND_ROUTE);
+          });
+        }}
+      >
+        {t('sendSpecifiedTokens', [tokenSymbol])}
+      </Button>
+    );
+  }, [
+    tokenSymbol,
+    sendTokenEvent,
+    tokenAddress,
+    tokenDecimals,
+    history,
+    t,
+    dispatch,
+  ]);
+
   return (
     <ListItem
       className={classnames('asset-list-item', className)}
@@ -126,12 +164,18 @@ const AssetListItem = ({
       }
       midContent={midContent}
       rightContent={
-        !isERC721 && (
+        (!isERC721 && (
           <>
             <i className="fas fa-chevron-right asset-list-item__chevron-right" />
             {sendTokenButton}
           </>
-        )
+        )) ||
+        (isERC721 && (
+          <>
+            <i className="fas fa-chevron-right asset-list-item__chevron-right" />
+            {showTokenNFTList}
+          </>
+        ))
       }
     />
   );

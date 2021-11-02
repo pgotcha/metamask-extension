@@ -6,6 +6,7 @@ import {
 } from '../../../shared/modules/conversion.utils';
 import * as util from './util';
 import { formatCurrency } from './confirm-tx.util';
+import fetchWithCache from './fetch-with-cache';
 
 const DEFAULT_SYMBOL = '';
 
@@ -18,6 +19,77 @@ async function getSymbolFromContract(tokenAddress) {
   } catch (error) {
     log.warn(
       `symbol() call for token at address ${tokenAddress} resulted in error:`,
+      error,
+    );
+    return undefined;
+  }
+}
+// POL
+async function parseTokenNFTURI(tokenURL) {
+  // console.error('Token URL: ', tokenURL);
+  const response = await fetchWithCache(
+    tokenURL,
+    { method: 'GET', mode: 'cors' },
+    { cacheRefreshTime: 600000 },
+  );
+  const retorno = JSON.parse(JSON.stringify(response));
+  // console.error('parseTokenNFTURI JSON: ', JSON.stringify(response));
+  // console.error('parseTokenNFTURI: ', JSON.stringify(util.valuesFor(response)));
+  const imageuri = retorno.image.toString();
+  const retImage = imageuri.replace('ipfs://', 'https://ipfs.io/ipfs/');
+  // console.error('parseTokenNFTURI Image: ', retImage);
+  return retImage;
+}
+
+// POL
+async function getBalanceFromOwnerAddress(tokenAddress, ownerAddress) {
+  const token = util.getContractAtAddress(tokenAddress);
+
+  try {
+    const result = await token.balanceOf(ownerAddress);
+
+    return result;
+  } catch (error) {
+    log.warn(
+      `balanceOf() call for token at address ${ownerAddress} resulted in error:`,
+      error,
+    );
+    return undefined;
+  }
+}
+
+// POL
+async function getTokenOfOwnerAddresByIndex(tokenAddress, ownerAddress, index) {
+  const token = util.getContractAtAddress(tokenAddress);
+
+  try {
+    const result = await token.tokenOfOwnerByIndex(ownerAddress, index);
+    const valor = util.valuesFor(result[0]);
+
+    // console.error('getTokenOfOwnerAddresByIndex:', valor[1]);
+    return valor[1];
+  } catch (error) {
+    log.warn(
+      `getTokenOfOwnerAddresByIndex() call for token at address ${ownerAddress} resulted in error:`,
+      error,
+    );
+    return undefined;
+  }
+}
+
+// POL
+async function getTokenURIByID(tokenAddress, tokenID) {
+  const token = util.getContractAtAddress(tokenAddress);
+
+  try {
+    // eslint-disable-next-line radix
+    const result = await token.tokenURI(parseInt(tokenID));
+    const retorno = result[0];
+    // console.error('tokenURI:', retorno);
+    return retorno;
+  } catch (error) {
+    log.warn(
+      `tokenURI() call for token at token id ${tokenID} resulted in error:`,
       error,
     );
     return undefined;
@@ -36,7 +108,7 @@ async function getDecimalsFromContract(tokenAddress) {
       `decimals() call for token at address ${tokenAddress} resulted in error:`,
       error,
     );
-    return undefined;
+    return '0'; // POL before were undefined
   }
 }
 
@@ -48,6 +120,47 @@ function getTokenMetadata(tokenAddress, tokenList) {
     };
   }, {});
   return tokenAddress && casedTokenList[tokenAddress.toLowerCase()];
+}
+
+// POL
+async function getBalanceOf(tokenAddress, tokenList, ownerAddress) {
+  let balance = await getBalanceFromOwnerAddress(tokenAddress, ownerAddress);
+
+  if (!balance) {
+    const contractMetadataInfo = getTokenMetadata(tokenAddress, tokenList);
+
+    if (contractMetadataInfo) {
+      balance = contractMetadataInfo.balance;
+    }
+  }
+
+  return balance;
+}
+
+// POL
+async function getTokenOfOwnerByIndex(
+  tokenAddress,
+  ownerAddress,
+  tokenBalance,
+) {
+  const listOfTokens = [];
+
+  for (let i = 0; i < tokenBalance; i++) {
+    const value = await getTokenOfOwnerAddresByIndex(
+      tokenAddress,
+      ownerAddress,
+      i,
+    );
+    listOfTokens.push(value);
+  }
+
+  return listOfTokens;
+}
+
+// POL
+async function getTokenURIFromOwnerByID(tokenAddress, tokenID) {
+  const tokenURI = await getTokenURIByID(tokenAddress, tokenID);
+  return tokenURI;
 }
 
 async function getSymbol(tokenAddress, tokenList) {
@@ -78,6 +191,24 @@ async function getDecimals(tokenAddress, tokenList) {
   return decimals;
 }
 
+// POL
+export async function getParsedTokenNFTURI(tokenURL) {
+  let resp;
+  try {
+    resp = await parseTokenNFTURI(tokenURL);
+  } catch (error) {
+    log.warn(
+      `getParsedTokenNFTURI() calls for tokenURL ${tokenURL} resulted in error:`,
+      error,
+    );
+  }
+
+  return {
+    imgURI: resp || 'http://',
+  };
+}
+
+
 export async function getSymbolAndDecimals(tokenAddress, tokenList) {
   let symbol, decimals;
 
@@ -93,7 +224,44 @@ export async function getSymbolAndDecimals(tokenAddress, tokenList) {
 
   return {
     symbol: symbol || DEFAULT_SYMBOL,
-    decimals,
+    decimals: decimals || 0,
+  };
+}
+
+// POL
+export function tokenBalanceOf() {
+  const tokens = {};
+
+  return async (address, tokenList, ownerAddress) => {
+    if (tokens[address]) {
+      return tokens[address];
+    }
+
+    const balance = await getBalanceOf(address, tokenList, ownerAddress);
+
+    return balance;
+  };
+}
+
+export function getListOfTokenByOwner() {
+  return async (tokenAddress, ownerAddress, tokenBalance) => {
+    // console.error(`getListOfTokenByOwner: ${tokenAddress} - ${ownerAddress} - ${tokenBalance}`);
+
+    const listOfTokens = await getTokenOfOwnerByIndex(
+      tokenAddress,
+      ownerAddress,
+      tokenBalance,
+    );
+    // console.error(listOfTokens);
+    return listOfTokens;
+  };
+}
+
+export function getTokenURI() {
+  return async (tokenAddress, tokenID) => {
+    const tokenURI = await getTokenURIFromOwnerByID(tokenAddress, tokenID);
+    // console.error(tokenURI);
+    return tokenURI;
   };
 }
 

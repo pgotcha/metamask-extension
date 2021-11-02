@@ -1537,7 +1537,7 @@
     "message": "Red de prueba Rinkeby"
   },
   "ropsten": {
-    "message": "Red de prueba Ropsten"
+    "message": "Red de prueba Gotcha"
   },
   "rpcUrl": {
     "message": "Nueva dirección URL de RPC"
@@ -2431,5 +2431,26 @@
   },
   "zeroGasPriceOnSpeedUpError": {
     "message": "No hay entradas sobre el precio del gas al acelerar la transacción"
+  },
+  "showNFT": {
+    "message": "Muesta mis NFT's"
+  },
+  "importTokens": {
+    "message": "importar tokens"
+  },
+  "showMyNFTCamelCase": {
+    "message": "My NFT's"
+  },
+  "showMyNFTSubtitle": {
+    "message": "Ohh veamos.."
+  },
+  "missingToken": {
+    "message": "¿No ves tus tokens?"
+  },
+  "currentlyUnavailable": {
+    "message": "No disponible en esta red"
+  },
+  "addCustomToken": {
+    "message": "Agregar Token"
   }
 }

@@ -18,6 +18,7 @@ import RestoreVaultPage from '../keychains/restore-vault';
 import RevealSeedConfirmation from '../keychains/reveal-seed';
 import MobileSyncPage from '../mobile-sync';
 import ImportTokenPage from '../import-token';
+import ImportTokenNFTPage from '../show-nfts';
 import ConfirmImportTokenPage from '../confirm-import-token';
 import ConfirmAddSuggestedTokenPage from '../confirm-add-suggested-token';
 import CreateAccountPage from '../create-account';
@@ -35,6 +36,7 @@ import OnboardingAppHeader from '../onboarding-flow/onboarding-app-header/onboar
 
 import {
   IMPORT_TOKEN_ROUTE,
+  SHOW_NFT_ROUTE,
   ASSET_ROUTE,
   CONFIRM_ADD_SUGGESTED_TOKEN_ROUTE,
   CONFIRM_TRANSACTION_ROUTE,
@@ -154,6 +156,11 @@ export default class Routes extends Component {
         <Authenticated
           path={IMPORT_TOKEN_ROUTE}
           component={ImportTokenPage}
+          exact
+        />
+        <Authenticated
+          path={SHOW_NFT_ROUTE}
+          component={ImportTokenNFTPage}
           exact
         />
         <Authenticated

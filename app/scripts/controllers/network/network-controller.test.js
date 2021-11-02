@@ -185,6 +185,10 @@ describe('NetworkController', function () {
           input: 'goerli',
           expected: 'Goerli',
         },
+        {
+          input: 'gotcha',
+          expected: 'Gotcha',
+        },
       ];
 
       tests.forEach(({ input, expected }) =>

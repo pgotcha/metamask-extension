@@ -1138,6 +1138,9 @@
   "importTokens": {
     "message": "import tokens"
   },
+  "showNFT": {
+    "message": "Show my NFT's"
+  },
   "importTokensCamelCase": {
     "message": "Import Tokens"
   },
@@ -3014,5 +3017,11 @@
   },
   "zeroGasPriceOnSpeedUpError": {
     "message": "Zero gas price on speed up"
-  }
+  },
+  "showMyNFTCamelCase": {
+    "message": "My NFT's"
+  },
+  "showMyNFTSubtitle": {
+    "message": "Ohh lets see.."
+  }  
 }

@@ -148,7 +148,7 @@
     "message": "Importe:"
   },
   "appDescription": {
-    "message": "Una cartera de Ethereum en el explorador",
+    "message": "Una gotcha de Ethereum en el explorador",
     "description": "The description of the application"
   },
   "appName": {
@@ -1125,7 +1125,7 @@
     "message": "Debe seleccionar al menos 1 token."
   },
   "myAccounts": {
-    "message": "Mis cuentas"
+    "message": "Mis Gotcha cuentas"
   },
   "name": {
     "message": "Nombre"
@@ -1537,7 +1537,7 @@
     "message": "Red de prueba Rinkeby"
   },
   "ropsten": {
-    "message": "Red de prueba Ropsten"
+    "message": "Red de prueba Gotcha"
   },
   "rpcUrl": {
     "message": "Nueva dirección URL de RPC"
@@ -2325,7 +2325,7 @@
     "message": "Desbloquear"
   },
   "unlockMessage": {
-    "message": "La Web descentralizada espera"
+    "message": "Gotcha rocks!"
   },
   "unrecognizedChain": {
     "message": "No se reconoce esta red personalizada. Antes de continuar, le recomendamos que $1",
@@ -2397,7 +2397,7 @@
     "message": "Bienvenido a MetaMask"
   },
   "welcomeBack": {
-    "message": "Hola de nuevo"
+    "message": "Hi Gotchers!"
   },
   "whatsNew": {
     "message": "Novedades",
@@ -2431,5 +2431,29 @@
   },
   "zeroGasPriceOnSpeedUpError": {
     "message": "No hay entradas sobre el precio del gas al acelerar la transacción"
+  },
+  "showNFT": {
+    "message": "Muesta mis NFT's"
+  },
+  "importTokens": {
+    "message": "importar tokens"
+  },
+  "showMyNFTCamelCase": {
+    "message": "My NFT's"
+  },
+  "showMyNFTSubtitle": {
+    "message": "Ohh veamos.."
+  },
+  "missingToken": {
+    "message": "¿No ves tus tokens?"
+  },
+  "currentlyUnavailable": {
+    "message": "No disponible en esta red"
+  },
+  "addCustomToken": {
+    "message": "Agregar Token"
+  },
+  "importTokensCamelCase": {
+    "message": "Importar Tokens"
   }
 }

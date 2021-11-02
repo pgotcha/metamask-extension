@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { getTokenTrackerLink } from '@metamask/etherscan-link';
-import TransactionList from '../../../components/app/transaction-list';
+import NFTList from '../../../components/app/nft-list';
 import { TokenOverview } from '../../../components/app/wallet-overview';
 import {
   getCurrentChainId,
@@ -14,7 +14,7 @@ import { DEFAULT_ROUTE } from '../../../helpers/constants/routes';
 import { getURLHostName } from '../../../helpers/utils/util';
 import { showModal } from '../../../store/actions';
 import { useNewMetricEvent } from '../../../hooks/useMetricEvent';
-
+import { useTokenTracker } from '../../../hooks/useTokenTracker';
 import AssetNavigation from './asset-navigation';
 import AssetOptions from './asset-options';
 
@@ -26,6 +26,8 @@ export default function TokenAsset({ token }) {
   const selectedAccountName = selectedIdentity.name;
   const selectedAddress = selectedIdentity.address;
   const history = useHistory();
+  const { tokensWithBalances } = useTokenTracker([token]);
+  const balance = tokensWithBalances[0] ? tokensWithBalances[0]?.string : '0';
   const tokenTrackerLink = getTokenTrackerLink(
     token.address,
     chainId,
@@ -68,7 +70,13 @@ export default function TokenAsset({ token }) {
         }
       />
       <TokenOverview className="asset__overview" token={token} />
-      <TransactionList tokenAddress={token.address} />
+      {balance > 0 && (
+        <NFTList
+          tokenAddress={token.address}
+          userAddress={selectedAddress}
+          tokenBalance={balance}
+        />
+      )}
     </>
   );
 }

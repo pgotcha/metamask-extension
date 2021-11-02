@@ -14,6 +14,7 @@ import {
   ROPSTEN,
   ROPSTEN_CHAIN_ID,
   ROPSTEN_RPC_URL,
+  GOTCHA_RPC_URL,
 } from '../../../../shared/constants/network';
 
 const defaultNetworksData = [
